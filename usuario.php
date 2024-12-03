@@ -1,10 +1,31 @@
-<?php
-require 'db.php';
+<?php 
+require 'db.php'; 
 
-$db = Database::getInstance();
-$logger = new Log();
+$db = Database::getInstance(); 
+$logger = new Log(); 
 
-$logger->write('Request received: ' . $_SERVER['REQUEST_METHOD']);
+$logger->write('Request received: ' . $_SERVER['REQUEST_METHOD']); 
+
+function verify_credentials() { 
+    global $db, $logger; 
+    $headers = apache_request_headers(); 
+    if (isset($headers['Authorization'])) { 
+        $auth = base64_decode(str_replace('Basic ', '', $headers['Authorization'])); 
+        list($correo, $contraseña) = explode(':', $auth); 
+        $stmt = $db->prepare('SELECT * FROM usuario WHERE correo_usuario = ?'); 
+        $stmt->execute([$correo]); $user = $stmt->fetch(PDO::FETCH_ASSOC); 
+        if ($user && password_verify($contraseña, $user['contraseña_usuario'])) { 
+            $logger->write('User verified: ' . json_encode($user)); 
+            return true; 
+        } 
+    } 
+    $logger->write('User verification failed'); 
+    http_response_code(401); 
+    echo json_encode(['message' => 'Acceso no autorizado']); 
+    exit(); 
+}
+
+verify_credentials(); // Verificar credenciales antes de proceder con la solicitud
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
