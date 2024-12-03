@@ -4,39 +4,74 @@ require 'db.php';
 $db = Database::getInstance();
 $logger = new Log();
 
+$logger->write('Request received: ' . $_SERVER['REQUEST_METHOD']);
+
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         if (isset($_GET['id_usuario'])) {
+            $id_usuario = $_GET['id_usuario'];
+            $logger->write('Fetching user with ID: ' . $id_usuario);
+
             $stmt = $db->prepare('SELECT * FROM usuario WHERE id_usuario = ?');
-            $stmt->execute([$_GET['id_usuario']]);
-            $logger->write('GET request for user ID ' . $_GET['id_usuario']);
-            echo json_encode($stmt->fetch(PDO::FETCH_ASSOC));
+            $stmt->execute([$id_usuario]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $logger->write('User data fetched: ' . json_encode($user));
+            echo json_encode($user);
         } else {
+            $logger->write('Fetching all users');
+
             $stmt = $db->query('SELECT * FROM usuario');
-            $logger->write('GET request for all users');
-            echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $logger->write('All user data fetched: ' . json_encode($users));
+            echo json_encode($users);
         }
         break;
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
+        $logger->write('Post data received: ' . json_encode($data));
+
         $stmt = $db->prepare('INSERT INTO usuario (id_empresa, nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)');
-        $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['created_by']]);
-        $logger->write('POST request: new user created with email ' . $data['correo_usuario']);
-        echo json_encode(['message' => 'Usuario creado']);
+        $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['created_by']]);
+
+        if ($result) {
+            $logger->write('User created with data: ' . json_encode($data));
+            echo json_encode(['message' => 'Usuario creado']);
+        } else {
+            $logger->write('Failed to create user: ' . json_encode($stmt->errorInfo()));
+            echo json_encode(['message' => 'Error al crear el usuario']);
+        }
         break;
     case 'PUT':
         $data = json_decode(file_get_contents('php://input'), true);
+        $logger->write('Put data received: ' . json_encode($data));
+
         $stmt = $db->prepare('UPDATE usuario SET id_empresa = ?, nombre_usuario = ?, direccion_usuario = ?, telefono_usuario = ?, correo_usuario = ?, contraseña_usuario = ?, tipo_usuario = ?, first_login = ? WHERE id_usuario = ?');
-        $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['id_usuario']]);
-        $logger->write('PUT request: user ID ' . $data['id_usuario'] . ' updated');
-        echo json_encode(['message' => 'Usuario actualizado']);
+        $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['id_usuario']]);
+
+        if ($result) {
+            $logger->write('User updated with data: ' . json_encode($data));
+            echo json_encode(['message' => 'Usuario actualizado']);
+        } else {
+            $logger->write('Failed to update user: ' . json_encode($stmt->errorInfo()));
+            echo json_encode(['message' => 'Error al actualizar el usuario']);
+        }
         break;
     case 'DELETE':
         $id_usuario = $_GET['id_usuario'];
+        $logger->write('Delete request received for user ID: ' . $id_usuario);
+
         $stmt = $db->prepare('UPDATE usuario SET tipo_usuario = "inactivo" WHERE id_usuario = ?');
-        $stmt->execute([$id_usuario]);
-        $logger->write('DELETE request: user ID ' . $id_usuario . ' marked as inactive');
-        echo json_encode(['message' => 'Usuario marcado como inactivo']);
+        $result = $stmt->execute([$id_usuario]);
+
+        if ($result) {
+            $logger->write('User marked as inactive with ID: ' . $id_usuario);
+            echo json_encode(['message' => 'Usuario marcado como inactivo']);
+        } else {
+            $logger->write('Failed to mark user as inactive: ' . json_encode($stmt->errorInfo()));
+            echo json_encode(['message' => 'Error al marcar el usuario como inactivo']);
+        }
         break;
     default:
         $logger->write('Unhandled request method: ' . $_SERVER['REQUEST_METHOD']);
