@@ -3,6 +3,7 @@ header("Content-Type: application/json");
 
 $url = $_SERVER['REQUEST_URI'];
 
+$db = Database::getInstance();
 $logger = new Log();
 $logger->write('Request received: ' . $_SERVER['REQUEST_METHOD']);
 
