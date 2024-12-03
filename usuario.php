@@ -7,7 +7,7 @@ $logger = new Log();
 $logger->write('Request received: ' . $_SERVER['REQUEST_METHOD']);
 
 switch ($_SERVER['REQUEST_METHOD']) {
-    case 'GET':
+    case "GET":
         if (isset($_GET['id_usuario'])) {
             $id_usuario = $_GET['id_usuario'];
             $logger->write('Fetching user with ID: ' . $id_usuario);
@@ -28,7 +28,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             echo json_encode($users);
         }
         break;
-    case 'POST':
+    case "POST":
         $data = json_decode(file_get_contents('php://input'), true);
         $logger->write('Post data received: ' . json_encode($data));
 
@@ -72,7 +72,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             echo json_encode(['message' => 'Faltan campos requeridos en los datos', 'data' => $data]);
         }
         break;
-    case 'PUT':
+    case "PUT":
         $data = json_decode(file_get_contents('php://input'), true);
         $logger->write('Put data received: ' . json_encode($data));
 
@@ -116,7 +116,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             echo json_encode(['message' => 'Faltan campos requeridos en los datos', 'data' => $data]);
         }
         break;
-    case 'DELETE':
+    case "DELETE":
         $id_usuario = $_GET['id_usuario'];
         $logger->write('Delete request received for user ID: ' . $id_usuario);
 
