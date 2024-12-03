@@ -35,14 +35,28 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if (isset($data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['contraseña_usuario'], $data['tipo_usuario'], $data['first_login'], $data['created_by'])) {
             $logger->write('All required fields are present.');
 
+            // Verificación de datos recibidos
+            $logger->write('Data received for insertion: ' . json_encode($data));
+
             $stmt = $db->prepare('INSERT INTO usuario (id_empresa, nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)');
-            $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
+            $logger->write('Prepared statement: ' . $stmt->queryString);
 
             try {
-                $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['created_by']]);
+                // Ejecutar la declaración preparada
+                $result = $stmt->execute([
+                    $data['id_empresa'],
+                    $data['nombre_usuario'],
+                    $data['direccion_usuario'],
+                    $data['telefono_usuario'],
+                    $data['correo_usuario'],
+                    password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT),
+                    $data['tipo_usuario'],
+                    $data['first_login'],
+                    $data['created_by']
+                ]);
 
                 if ($result) {
-                    $logger->write('User created with data: ' . json_encode($data));
+                    $logger->write('User created successfully: ' . json_encode($data));
                     echo json_encode(['message' => 'Usuario creado']);
                 } else {
                     $errorInfo = $stmt->errorInfo();
@@ -65,14 +79,28 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if (isset($data['id_usuario'], $data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['contraseña_usuario'], $data['tipo_usuario'], $data['first_login'])) {
             $logger->write('All required fields are present.');
 
+            // Verificación de datos recibidos
+            $logger->write('Data received for update: ' . json_encode($data));
+
             $stmt = $db->prepare('UPDATE usuario SET id_empresa = ?, nombre_usuario = ?, direccion_usuario = ?, telefono_usuario = ?, correo_usuario = ?, contraseña_usuario = ?, tipo_usuario = ?, first_login = ? WHERE id_usuario = ?');
-            $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
+            $logger->write('Prepared statement: ' . $stmt->queryString);
 
             try {
-                $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['id_usuario']]);
+                // Ejecutar la declaración preparada
+                $result = $stmt->execute([
+                    $data['id_empresa'],
+                    $data['nombre_usuario'],
+                    $data['direccion_usuario'],
+                    $data['telefono_usuario'],
+                    $data['correo_usuario'],
+                    password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT),
+                    $data['tipo_usuario'],
+                    $data['first_login'],
+                    $data['id_usuario']
+                ]);
 
                 if ($result) {
-                    $logger->write('User updated with data: ' . json_encode($data));
+                    $logger->write('User updated successfully: ' . json_encode($data));
                     echo json_encode(['message' => 'Usuario actualizado']);
                 } else {
                     $errorInfo = $stmt->errorInfo();
@@ -93,13 +121,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $logger->write('Delete request received for user ID: ' . $id_usuario);
 
         $stmt = $db->prepare('UPDATE usuario SET tipo_usuario = "inactivo" WHERE id_usuario = ?');
-        $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
+        $logger->write('Prepared statement: ' . $stmt->queryString);
 
         try {
+            // Ejecutar la declaración preparada
             $result = $stmt->execute([$id_usuario]);
 
             if ($result) {
-                $logger->write('User marked as inactive with ID: ' . $id_usuario);
+                $logger->write('User marked as inactive successfully with ID: ' . $id_usuario);
                 echo json_encode(['message' => 'Usuario marcado como inactivo']);
             } else {
                 $errorInfo = $stmt->errorInfo();
