@@ -38,15 +38,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $stmt = $db->prepare('INSERT INTO usuario (id_empresa, nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)');
             $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
 
-            $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['created_by']]);
+            try {
+                $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['created_by']]);
 
-            if ($result) {
-                $logger->write('User created with data: ' . json_encode($data));
-                echo json_encode(['message' => 'Usuario creado']);
-            } else {
-                $errorInfo = $stmt->errorInfo();
-                $logger->write('Failed to create user: ' . json_encode($errorInfo));
-                echo json_encode(['message' => 'Error al crear el usuario', 'error' => $errorInfo]);
+                if ($result) {
+                    $logger->write('User created with data: ' . json_encode($data));
+                    echo json_encode(['message' => 'Usuario creado']);
+                } else {
+                    $errorInfo = $stmt->errorInfo();
+                    $logger->write('Failed to create user: ' . json_encode($errorInfo));
+                    echo json_encode(['message' => 'Error al crear el usuario', 'error' => $errorInfo]);
+                }
+            } catch (PDOException $e) {
+                $logger->write('PDOException: ' . $e->getMessage());
+                echo json_encode(['message' => 'Error al crear el usuario', 'error' => $e->getMessage()]);
             }
         } else {
             $logger->write('Missing required fields in POST data: ' . json_encode($data));
@@ -63,15 +68,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $stmt = $db->prepare('UPDATE usuario SET id_empresa = ?, nombre_usuario = ?, direccion_usuario = ?, telefono_usuario = ?, correo_usuario = ?, contraseña_usuario = ?, tipo_usuario = ?, first_login = ? WHERE id_usuario = ?');
             $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
 
-            $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['id_usuario']]);
+            try {
+                $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['id_usuario']]);
 
-            if ($result) {
-                $logger->write('User updated with data: ' . json_encode($data));
-                echo json_encode(['message' => 'Usuario actualizado']);
-            } else {
-                $errorInfo = $stmt->errorInfo();
-                $logger->write('Failed to update user: ' . json_encode($errorInfo));
-                echo json_encode(['message' => 'Error al actualizar el usuario', 'error' => $errorInfo]);
+                if ($result) {
+                    $logger->write('User updated with data: ' . json_encode($data));
+                    echo json_encode(['message' => 'Usuario actualizado']);
+                } else {
+                    $errorInfo = $stmt->errorInfo();
+                    $logger->write('Failed to update user: ' . json_encode($errorInfo));
+                    echo json_encode(['message' => 'Error al actualizar el usuario', 'error' => $errorInfo]);
+                }
+            } catch (PDOException $e) {
+                $logger->write('PDOException: ' . $e->getMessage());
+                echo json_encode(['message' => 'Error al actualizar el usuario', 'error' => $e->getMessage()]);
             }
         } else {
             $logger->write('Missing required fields in PUT data: ' . json_encode($data));
@@ -85,15 +95,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $stmt = $db->prepare('UPDATE usuario SET tipo_usuario = "inactivo" WHERE id_usuario = ?');
         $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
 
-        $result = $stmt->execute([$id_usuario]);
+        try {
+            $result = $stmt->execute([$id_usuario]);
 
-        if ($result) {
-            $logger->write('User marked as inactive with ID: ' . $id_usuario);
-            echo json_encode(['message' => 'Usuario marcado como inactivo']);
-        } else {
-            $errorInfo = $stmt->errorInfo();
-            $logger->write('Failed to mark user as inactive: ' . json_encode($errorInfo));
-            echo json_encode(['message' => 'Error al marcar el usuario como inactivo', 'error' => $errorInfo]);
+            if ($result) {
+                $logger->write('User marked as inactive with ID: ' . $id_usuario);
+                echo json_encode(['message' => 'Usuario marcado como inactivo']);
+            } else {
+                $errorInfo = $stmt->errorInfo();
+                $logger->write('Failed to mark user as inactive: ' . json_encode($errorInfo));
+                echo json_encode(['message' => 'Error al marcar el usuario como inactivo', 'error' => $errorInfo]);
+            }
+        } catch (PDOException $e) {
+            $logger->write('PDOException: ' . $e->getMessage());
+            echo json_encode(['message' => 'Error al marcar el usuario como inactivo', 'error' => $e->getMessage()]);
         }
         break;
     default:
