@@ -4,7 +4,7 @@ require 'log.php';
 class Database {
     private static $instance = null;
     private $connection;
-    private $host = 'localhost';
+    private $host = '127.0.0.1';
     private $dbname = 'u943683090_esap_stg';
     private $username = 'u943683090_esap_stg';
     private $password = 'E.s.a.p.1';
