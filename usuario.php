@@ -12,7 +12,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             $id_usuario = $_GET['id_usuario'];
             $logger->write('Fetching user with ID: ' . $id_usuario);
 
-            $stmt = $db->prepare('SELECT * FROM usuario WHERE id_usuario = ?');
+            $stmt = $db->prepare('SELECT * FROM usuario WHERE id_usuario = ? and tipo_usuario <> "inactivo"');
             $stmt->execute([$id_usuario]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -21,7 +21,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         } else {
             $logger->write('Fetching all users');
 
-            $stmt = $db->query('SELECT * FROM usuario');
+            $stmt = $db->query('SELECT * FROM usuario where tipo_usuario <> "inactivo"');
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             $logger->write('All user data fetched: ' . json_encode($users));
