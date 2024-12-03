@@ -33,7 +33,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $logger->write('Post data received: ' . json_encode($data));
 
         if (isset($data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['contraseña_usuario'], $data['tipo_usuario'], $data['first_login'], $data['created_by'])) {
+            $logger->write('All required fields are present.');
+
             $stmt = $db->prepare('INSERT INTO usuario (id_empresa, nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)');
+            $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
+
             $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['created_by']]);
 
             if ($result) {
@@ -54,7 +58,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $logger->write('Put data received: ' . json_encode($data));
 
         if (isset($data['id_usuario'], $data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['contraseña_usuario'], $data['tipo_usuario'], $data['first_login'])) {
+            $logger->write('All required fields are present.');
+
             $stmt = $db->prepare('UPDATE usuario SET id_empresa = ?, nombre_usuario = ?, direccion_usuario = ?, telefono_usuario = ?, correo_usuario = ?, contraseña_usuario = ?, tipo_usuario = ?, first_login = ? WHERE id_usuario = ?');
+            $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
+
             $result = $stmt->execute([$data['id_empresa'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT), $data['tipo_usuario'], $data['first_login'], $data['id_usuario']]);
 
             if ($result) {
@@ -75,6 +83,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $logger->write('Delete request received for user ID: ' . $id_usuario);
 
         $stmt = $db->prepare('UPDATE usuario SET tipo_usuario = "inactivo" WHERE id_usuario = ?');
+        $logger->write('Prepared statement: ' . json_encode($stmt->queryString));
+
         $result = $stmt->execute([$id_usuario]);
 
         if ($result) {
