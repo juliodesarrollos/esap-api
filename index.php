@@ -5,7 +5,7 @@ $url = $_SERVER['REQUEST_URI'];
 
 if (strpos($url, '/login') !== false) {
     require 'login.php';
-} elseif (strpos($url, '/usuarios') !== false) {
+} elseif (strpos($url, '/users') !== false) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
             require 'usuarios/create_user.php';
