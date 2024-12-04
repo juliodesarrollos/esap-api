@@ -1,5 +1,5 @@
 <?php
-require '../db.php';
+require 'db.php';
 
 $db = Database::getInstance();
 $logger = new Log();
