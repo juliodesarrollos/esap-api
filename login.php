@@ -18,17 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($user && password_verify($contraseña, $user['contraseña_usuario'])) {
             $logger->write('User authenticated: ' . json_encode($user));
-            echo json_encode(['message' => 'Login exitoso']);
+            echo json_encode([
+                'message' => 'Login exitoso',
+                'user' => $user
+            ]);
         } else {
             $logger->write('Login failed for: ' . $correo);
+            http_response_code(401);
             echo json_encode(['message' => 'Correo o contraseña incorrectos']);
         }
     } else {
         $logger->write('Correo o contraseña faltantes en la solicitud: ' . json_encode($data));
+        http_response_code(400);
         echo json_encode(['message' => 'Correo o contraseña faltantes']);
     }
 } else {
     $logger->write('Método no permitido: ' . $_SERVER['REQUEST_METHOD']);
+    http_response_code(405);
     echo json_encode(['message' => 'Método no permitido']);
 }
 ?>
