@@ -23,6 +23,22 @@ try {
             http_response_code(404);
             echo json_encode(['message' => 'Usuario no encontrado']);
         }
+    } elseif (isset($_GET['id_empresa'])) {
+        $id_empresa = $_GET['id_empresa'];
+        $logger->write('Fetching users with id_empresa: ' . $id_empresa);
+
+        $stmt = $db->prepare('SELECT * FROM usuario WHERE id_empresa = ? ORDER BY tipo_usuario ASC');
+        $stmt->execute([$id_empresa]);
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($users) {
+            $logger->write('Users data fetched: ' . json_encode($users));
+            echo json_encode($users);
+        } else {
+            $logger->write('No users found with id_empresa: ' . $id_empresa);
+            http_response_code(404);
+            echo json_encode(['message' => 'No se encontraron usuarios para la empresa especificada']);
+        }
     } else {
         $logger->write('Fetching all users ordered by tipo_usuario ASC');
 

@@ -34,7 +34,7 @@ if (isset($data['id_usuario'], $data['id_empresa'], $data['nombre_usuario'], $da
         }
     } catch (PDOException $e) {
         $logger->write('PDOException: ' . $e->getMessage());
-        echo json_encode(['message' => 'Error al actualizar el usuario', 'error' => $e->getMessage()]);
+        echo json_encode(['message' => 'Error al actualizar e l usuario', 'error' => $e->getMessage()]);
     }
 } else {
     $logger->write('Missing required fields in PUT data: ' . json_encode($data));
