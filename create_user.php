@@ -10,6 +10,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['contraseña_usuario'], $data['tipo_usuario'], $data['first_login'], $data['created_by'])) {
         try {
+            // Verificar si el correo ya existe
+            $stmt = $db->prepare('SELECT COUNT(*) FROM usuario WHERE correo_usuario = ?');
+            $stmt->execute([$data['correo_usuario']]);
+            $count = $stmt->fetchColumn();
+
+            if ($count > 0) {
+                $logger->write('Correo ya existe: ' . $data['correo_usuario']);
+                http_response_code(409);
+                echo json_encode(['message' => 'El correo ya está registrado']);
+                exit;
+            }
+
+            // Insertar el nuevo usuario
             $stmt = $db->prepare('INSERT INTO usuario (nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
             $result = $stmt->execute([
                 $data['nombre_usuario'],
@@ -34,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } catch (PDOException $e) {
             $logger->write('PDOException: ' . $e->getMessage());
-            http_response_code(501);
+            http_response_code(500);
             echo json_encode(['message' => 'Error al crear el usuario', 'error' => $e->getMessage()]);
         }
     } else {
