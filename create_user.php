@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Create user request received: ' . json_encode($data));
 
-    if (isset($data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['contraseña_usuario'], $data['tipo_usuario'], $data['first_login'], $data['created_by'])) {
+    if (isset($data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['contraseña_usuario'], $data['tipo_usuario'], $data['first_login'], $data['created_by'], $data['id_empresa'])) {
         try {
             // Verificar si el correo ya existe
             $stmt = $db->prepare('SELECT COUNT(*) FROM usuario WHERE correo_usuario = ?');
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Insertar el nuevo usuario
-            $stmt = $db->prepare('INSERT INTO usuario (nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt = $db->prepare('INSERT INTO usuario (nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_by, id_empresa, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $result = $stmt->execute([
                 $data['nombre_usuario'],
                 $data['direccion_usuario'],
@@ -32,7 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT),
                 $data['tipo_usuario'],
                 $data['first_login'],
-                $data['created_by']
+                $data['created_by'],
+                $data['id_empresa'],
+                date('Y-m-d H:i:s') // created_at
             ]);
 
             if ($result) {
