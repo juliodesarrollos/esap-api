@@ -20,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             $nuevo_prefijo = 'inactivo_' . $empresa['prefijo_empresa'];
 
             // Marcar la empresa como inactiva y actualizar el prefijo
-            $stmt = $db->prepare('UPDATE empresa SET estado_empresa = ?, prefijo_empresa = ? WHERE id_empresa = ?');
-            $stmt->execute(['inactiva', $nuevo_prefijo, $id_empresa]);
+            $stmt = $db->prepare('UPDATE empresa SET prefijo_empresa = ? WHERE id_empresa = ?');
+            $stmt->execute([$nuevo_prefijo, $id_empresa]);
 
             $logger->write('Empresa marked as inactive with ID: ' . $id_empresa);
             echo json_encode(['message' => 'Empresa marcada como inactiva exitosamente']);
