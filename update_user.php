@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Update user request received: ' . json_encode($data));
 
-    if (isset($data['id_usuario'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['tipo_usuario'], $data['first_login'], $data['created_by'], $data['id_empresa'])) {
+    if (isset($data['id_usuario'], $data['nombre_usuario'], $data['direccion_usuario'], $data['telefono_usuario'], $data['correo_usuario'], $data['tipo_usuario'], $data['first_login'], $data['id_empresa'])) {
         try {
             // Verificar si el correo ya existe para otro usuario
             $stmt = $db->prepare('SELECT COUNT(*) FROM usuario WHERE correo_usuario = ? AND id_usuario != ?');
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             }
 
             // Actualizar el usuario
-            $stmt = $db->prepare('UPDATE usuario SET nombre_usuario = ?, direccion_usuario = ?, telefono_usuario = ?, correo_usuario = ?, tipo_usuario = ?, first_login = ?, created_by = ?, id_empresa = ? WHERE id_usuario = ?');
+            $stmt = $db->prepare('UPDATE usuario SET nombre_usuario = ?, direccion_usuario = ?, telefono_usuario = ?, correo_usuario = ?, tipo_usuario = ?, first_login = ?, id_empresa = ? WHERE id_usuario = ?');
             $result = $stmt->execute([
                 $data['nombre_usuario'],
                 $data['direccion_usuario'],
@@ -31,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                 $data['correo_usuario'],
                 $data['tipo_usuario'],
                 $data['first_login'],
-                $data['created_by'],
                 $data['id_empresa'],
                 $data['id_usuario']
             ]);
