@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $stmt->execute([$data['correo_usuario'], $data['id_usuario']]);
             $count = $stmt->fetchColumn();
 
-            if ($count > 0) {
+            if ($count > 0) {                                               
                 $logger->write('Correo ya existe para otro usuario: ' . $data['correo_usuario']);
                 http_response_code(409);
                 echo json_encode(['message' => 'El correo ya está registrado para otro usuario']);
