@@ -43,6 +43,25 @@ if (strpos($url, '/login') !== false) {
             echo json_encode(['message' => 'Método no permitido']);
             break;
     }
+} elseif (strpos($url, '/extintor') !== false) {
+    switch ($_SERVER['REQUEST_METHOD']) {
+        case 'POST':
+            require 'create_extintor.php';
+            break;
+        case 'GET':
+            require 'read_extintor.php';
+            break;
+        case 'PUT':
+            require 'update_extintor.php';
+            break;
+        case 'DELETE':
+            require 'delete_extintor.php';
+            break;
+        default:
+            http_response_code(405);
+            echo json_encode(['message' => 'Método no permitido']);
+            break;
+    }
 } else {
     http_response_code(404);
     echo json_encode(['message' => 'Endpoint no encontrado']);
