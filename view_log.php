@@ -1,4 +1,5 @@
 <?php
+require 'log.php';
 
 $logger = new Log();
 $log_file = 'app.log'; // Reemplaza con la ruta correcta a tu archivo de log
