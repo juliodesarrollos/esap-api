@@ -1,5 +1,4 @@
 <?php
-require 'auth.php'; // Asegúrate de tener autenticación para proteger el acceso
 
 $logger = new Log();
 $log_file = 'app.log'; // Reemplaza con la ruta correcta a tu archivo de log
