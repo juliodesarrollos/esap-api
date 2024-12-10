@@ -2,7 +2,7 @@
 require 'auth.php'; // Asegúrate de tener autenticación para proteger el acceso
 
 $logger = new Log();
-$log_file = 'path/to/your/app.log'; // Reemplaza con la ruta correcta a tu archivo de log
+$log_file = 'app.log'; // Reemplaza con la ruta correcta a tu archivo de log
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $num_lines = isset($_GET['lines']) ? intval($_GET['lines']) : 200; // Número de líneas a mostrar, por defecto 200
