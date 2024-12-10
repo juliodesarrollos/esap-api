@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $db->prepare('INSERT INTO empresa (nombre_empresa, direccion_empresa, telefono_empresa, correo_empresa, contraseña_empresa, prefijo_empresa, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->execute([$nombre, $direccion, $telefono, $correo, $contraseña, $prefijo, $created_at, $created_by]);
 
+        http_response_code(201);
         $logger->write('Empresa created: ' . json_encode($data));
         echo json_encode(['message' => 'Empresa creada exitosamente']);
     } else {
