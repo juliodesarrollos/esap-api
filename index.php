@@ -62,6 +62,13 @@ if (strpos($url, '/login') !== false) {
             echo json_encode(['message' => 'Método no permitido']);
             break;
     }
+} elseif (strpos($url, '/view_log') !== false) {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        require 'view_log.php';
+    } else {
+        http_response_code(405);
+        echo json_encode(['message' => 'Método no permitido']);
+    }
 } else {
     http_response_code(404);
     echo json_encode(['message' => 'Endpoint no encontrado']);
