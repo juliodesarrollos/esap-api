@@ -8,10 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Update extintor request received: ' . json_encode($data));
 
-    if (isset($data['id_extintor'], $data['id_empresa'], $data['posicion_extintor'], $data['id_agente'], $data['id_capacidad'], $data['id_marca'], $data['fecha_fabricacion_extintor'], $data['extintor_activo'])) {
+    if (isset($data['id_extintor'], $data['id_empresa'], $data['posicion_extintor'], $data['id_agente'], $data['id_capacidad'], $data['id_marca'], $data['fecha_fabricacion_extintor'], $data['extintor_activo'], $data['fecha_servicio'], $data['fecha_prueba'])) {
         try {
             // Actualizar el extintor
-            $stmt = $db->prepare('UPDATE extintor SET id_empresa = ?, posicion_extintor = ?, id_agente = ?, id_capacidad = ?, id_marca = ?, fecha_fabricacion_extintor = ?, extintor_activo = ? WHERE id_extintor = ?');
+            $stmt = $db->prepare('UPDATE extintor SET id_empresa = ?, posicion_extintor = ?, id_agente = ?, id_capacidad = ?, id_marca = ?, fecha_fabricacion_extintor = ?, extintor_activo = ?, fecha_servicio = ?, fecha_prueba = ? WHERE id_extintor = ?');
             $result = $stmt->execute([
                 $data['id_empresa'],
                 $data['posicion_extintor'],
@@ -20,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                 $data['id_marca'],
                 $data['fecha_fabricacion_extintor'],
                 $data['extintor_activo'],
+                $data['fecha_servicio'],
+                $data['fecha_prueba'],
                 $data['id_extintor']
             ]);
 

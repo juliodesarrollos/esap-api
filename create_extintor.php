@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($data['id_empresa'], $data['posicion_extintor'], $data['id_agente'], $data['id_capacidad'], $data['id_marca'], $data['fecha_fabricacion_extintor'], $data['extintor_activo'], $data['created_by'])) {
         try {
             // Insertar el nuevo extintor
-            $stmt = $db->prepare('INSERT INTO extintor (id_empresa, posicion_extintor, id_agente, id_capacidad, id_marca, fecha_fabricacion_extintor, extintor_activo, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt = $db->prepare('INSERT INTO extintor (id_empresa, posicion_extintor, id_agente, id_capacidad, id_marca, fecha_fabricacion_extintor, extintor_activo, created_at, created_by, fecha_servicio, fecha_prueba) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $result = $stmt->execute([
                 $data['id_empresa'],
                 $data['posicion_extintor'],
@@ -21,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data['fecha_fabricacion_extintor'],
                 $data['extintor_activo'],
                 date('Y-m-d H:i:s'), // created_at
-                $data['created_by']
+                $data['created_by'],
+                $data['fecha_servicio'],
+                $data['fecha_prueba']
             ]);
 
             if ($result) {
