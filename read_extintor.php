@@ -11,7 +11,14 @@ try {
         $id_extintor = $_GET['id_extintor'];
         $logger->write('Fetching extintor with ID: ' . $id_extintor);
 
-        $stmt = $db->prepare('SELECT * FROM extintor WHERE id_extintor = ?');
+        $stmt = $db->prepare('
+            SELECT e.*, a.agente, c.capacidad, m.marca 
+            FROM extintor e
+            JOIN agente a ON e.id_agente = a.id_agente
+            JOIN capacidad c ON e.id_capacidad = c.id_capacidad
+            JOIN marca m ON e.id_marca = m.id_marca
+            WHERE e.id_extintor = ?
+        ');
         $stmt->execute([$id_extintor]);
         $extintor = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -26,7 +33,13 @@ try {
     } else {
         $logger->write('Fetching all extintores');
 
-        $stmt = $db->query('SELECT * FROM extintor');
+        $stmt = $db->query('
+            SELECT e.*, a.agente, c.capacidad, m.marca 
+            FROM extintor e
+            JOIN agente a ON e.id_agente = a.id_agente
+            JOIN capacidad c ON e.id_capacidad = c.id_capacidad
+            JOIN marca m ON e.id_marca = m.id_marca
+        ');
         $extintores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $logger->write('All extintor data fetched: ' . json_encode($extintores));
