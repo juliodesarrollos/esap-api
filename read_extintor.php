@@ -39,6 +39,7 @@ try {
             JOIN agente a ON e.id_agente = a.id_agente
             JOIN capacidad c ON e.id_capacidad = c.id_capacidad
             JOIN marca m ON e.id_marca = m.id_marca
+            ORDER BY e.id_extintor ASC
         ');
         $extintores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
