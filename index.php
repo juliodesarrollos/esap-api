@@ -83,21 +83,21 @@ if (strpos($url, '/login') !== false) {
     }
 } elseif (strpos($url, '/agente') !== false) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        require 'read_agente.php';
+        require 'extinguishers/read_agente.php';
     } else {
         http_response_code(405);
         echo json_encode(['message' => 'Método no permitido']);
     }
 } elseif (strpos($url, '/capacidad') !== false) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        require 'read_capacidad.php';
+        require 'extinguishers/read_capacidad.php';
     } else {
         http_response_code(405);
         echo json_encode(['message' => 'Método no permitido']);
     }
 } elseif (strpos($url, '/marca') !== false) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        require 'read_marca.php';
+        require 'extinguishers/read_marca.php';
     } else {
         http_response_code(405);
         echo json_encode(['message' => 'Método no permitido']);
