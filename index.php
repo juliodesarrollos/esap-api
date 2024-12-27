@@ -65,16 +65,16 @@ if (strpos($url, '/login') !== false) {
 } elseif (strpos($url, '/extintor') !== false) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
-            require 'create_extintor.php';
+            require 'extinguishers/create_extintor.php';
             break;
         case 'GET':
-            require 'read_extintor.php';
+            require 'extinguishers/read_extintor.php';
             break;
         case 'PUT':
-            require 'update_extintor.php';
+            require 'extinguishers/update_extintor.php';
             break;
         case 'DELETE':
-            require 'delete_extintor.php';
+            require 'extinguishers/delete_extintor.php';
             break;
         default:
             http_response_code(405);
