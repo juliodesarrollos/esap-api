@@ -46,16 +46,16 @@ if (strpos($url, '/login') !== false) {
 } elseif (strpos($url, '/servicio') !== false) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
-            require 'create_servicio.php';
+            require 'services/create_servicio.php';
             break;
         case 'GET':
-            require 'read_servicio.php';
+            require 'services/read_servicio.php';
             break;
         case 'PUT':
-            require 'update_servicio.php';
+            require 'services/update_servicio.php';
             break;
         case 'DELETE':
-            require 'delete_servicio.php';
+            require 'services/delete_servicio.php';
             break;
         default:
             http_response_code(405);
