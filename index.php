@@ -8,16 +8,16 @@ if (strpos($url, '/login') !== false) {
 } elseif (strpos($url, '/usuarios') !== false) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
-            require 'create_user.php';
+            require 'users/create_user.php';
             break;
         case 'GET':
-            require 'read_user.php';
+            require 'users/read_user.php';
             break;
         case 'PUT':
-            require 'update_user.php';
+            require 'users/update_user.php';
             break;
         case 'DELETE':
-            require 'delete_user.php';
+            require 'users/delete_user.php';
             break;
         default:
             http_response_code(405);
@@ -37,6 +37,25 @@ if (strpos($url, '/login') !== false) {
             break;
         case 'DELETE':
             require 'delete_empresa.php';
+            break;
+        default:
+            http_response_code(405);
+            echo json_encode(['message' => 'Método no permitido']);
+            break;
+    }
+} elseif (strpos($url, '/servicio') !== false) {
+    switch ($_SERVER['REQUEST_METHOD']) {
+        case 'POST':
+            require 'create_servicio.php';
+            break;
+        case 'GET':
+            require 'read_servicio.php';
+            break;
+        case 'PUT':
+            require 'update_servicio.php';
+            break;
+        case 'DELETE':
+            require 'delete_servicio.php';
             break;
         default:
             http_response_code(405);
