@@ -27,16 +27,16 @@ if (strpos($url, '/login') !== false) {
 } elseif (strpos($url, '/empresa') !== false) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
-            require 'create_empresa.php';
+            require 'enterprises/create_empresa.php';
             break;
         case 'GET':
-            require 'read_empresa.php';
+            require 'enterprises/read_empresa.php';
             break;
         case 'PUT':
-            require 'update_empresa.php';
+            require 'enterprises/update_empresa.php';
             break;
         case 'DELETE':
-            require 'delete_empresa.php';
+            require 'enterprises/delete_empresa.php';
             break;
         default:
             http_response_code(405);
