@@ -18,6 +18,7 @@ try {
             JOIN capacidad c ON e.id_capacidad = c.id_capacidad
             JOIN marca m ON e.id_marca = m.id_marca
             WHERE e.id_extintor = ?
+            ORDER BY e.id_extintor ASC
         ');
         $stmt->execute([$id_extintor]);
         $extintor = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -41,6 +42,7 @@ try {
             JOIN capacidad c ON e.id_capacidad = c.id_capacidad
             JOIN marca m ON e.id_marca = m.id_marca
             WHERE e.id_empresa = ?
+            ORDER BY e.id_extintor ASC
         ');
         $stmt->execute([$id_empresa]);
         $extintores = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -62,6 +64,7 @@ try {
             JOIN agente a ON e.id_agente = a.id_agente
             JOIN capacidad c ON e.id_capacidad = c.id_capacidad
             JOIN marca m ON e.id_marca = m.id_marca
+            ORDER BY e.id_extintor ASC
         ');
         $extintores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
