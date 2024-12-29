@@ -30,6 +30,29 @@ try {
             http_response_code(404);
             echo json_encode(['message' => 'Extintor no encontrado']);
         }
+    } elseif (isset($_GET['id_empresa'])) {
+        $id_empresa = $_GET['id_empresa'];
+        $logger->write('Fetching extintores with empresa ID: ' . $id_empresa);
+
+        $stmt = $db->prepare('
+            SELECT e.*, a.agente, c.capacidad, m.marca 
+            FROM extintor e
+            JOIN agente a ON e.id_agente = a.id_agente
+            JOIN capacidad c ON e.id_capacidad = c.id_capacidad
+            JOIN marca m ON e.id_marca = m.id_marca
+            WHERE e.id_empresa = ?
+        ');
+        $stmt->execute([$id_empresa]);
+        $extintores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($extintores) {
+            $logger->write('Extintores data fetched: ' . json_encode($extintores));
+            echo json_encode($extintores);
+        } else {
+            $logger->write('No extintores found with empresa ID: ' . $id_empresa);
+            http_response_code(404);
+            echo json_encode(['message' => 'No se encontraron extintores para la empresa especificada']);
+        }
     } else {
         $logger->write('Fetching all extintores');
 
@@ -39,7 +62,6 @@ try {
             JOIN agente a ON e.id_agente = a.id_agente
             JOIN capacidad c ON e.id_capacidad = c.id_capacidad
             JOIN marca m ON e.id_marca = m.id_marca
-            ORDER BY e.id_extintor ASC
         ');
         $extintores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
