@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require '../db.php';
 
 $db = Database::getInstance();
 $logger = new Log();
@@ -33,10 +33,11 @@ try {
         $logger->write('Fetching servicios with empresa ID: ' . $id_empresa);
 
         $stmt = $db->prepare('
-            SELECT * 
-            FROM servicio 
-            WHERE id_empresa = ?
-            ORDER BY id_servicio ASC
+            SELECT s.*, 
+                   (SELECT COUNT(*) FROM evaluacion e WHERE e.id_servicio = s.id_servicio) AS numero_evaluaciones
+            FROM servicio s
+            WHERE s.id_empresa = ?
+            ORDER BY s.id_servicio ASC
         ');
         $stmt->execute([$id_empresa]);
         $servicios = $stmt->fetchAll(PDO::FETCH_ASSOC);
