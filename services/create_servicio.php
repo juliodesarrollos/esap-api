@@ -10,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($data['id_empresa'], $data['created_by'], $data['created_at'])) {
         try {
+            $db->beginTransaction();
+
             // Insertar el nuevo servicio
             $stmt = $db->prepare('INSERT INTO servicio (id_empresa, created_at, created_by) VALUES (?, ?, ?)');
             $result = $stmt->execute([
@@ -19,16 +21,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             if ($result) {
-                $logger->write('Servicio created successfully: ' . json_encode($data));
+                $id_servicio = $db->lastInsertId();
+                $logger->write('Servicio created successfully with ID: ' . $id_servicio);
+
+                // Insertar doce evaluaciones
+                $created_at = new DateTime($data['created_at']);
+                for ($i = 0; $i < 12; $i++) {
+                    $evaluation_date = $created_at->format('Y-m-d H:i:s');
+                    $stmt = $db->prepare('INSERT INTO evaluacion (id_servicio, created_at) VALUES (?, ?)');
+                    $stmt->execute([$id_servicio, $evaluation_date]);
+                    $created_at->modify('+1 month');
+                }
+
+                $db->commit();
+                $logger->write('Doce evaluaciones created successfully for servicio ID: ' . $id_servicio);
                 http_response_code(201);
-                echo json_encode(['message' => 'Servicio creado']);
+                echo json_encode(['message' => 'Servicio y evaluaciones creados']);
             } else {
+                $db->rollBack();
                 $errorInfo = $stmt->errorInfo();
                 $logger->write('Failed to create servicio: ' . json_encode($errorInfo));
                 http_response_code(500);
                 echo json_encode(['message' => 'Error al crear el servicio', 'error' => $errorInfo]);
             }
         } catch (PDOException $e) {
+            $db->rollBack();
             $logger->write('PDOException: ' . $e->getMessage());
             http_response_code(500);
             echo json_encode(['message' => 'Error al crear el servicio', 'error' => $e->getMessage()]);
