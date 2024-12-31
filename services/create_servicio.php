@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require '../db.php';
 
 $db = Database::getInstance();
 $logger = new Log();
@@ -8,13 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Create servicio request received: ' . json_encode($data));
 
-    if (isset($data['id_empresa'], $data['created_by'])) {
+    if (isset($data['id_empresa'], $data['created_by'], $data['created_at'])) {
         try {
             // Insertar el nuevo servicio
             $stmt = $db->prepare('INSERT INTO servicio (id_empresa, created_at, created_by) VALUES (?, ?, ?)');
             $result = $stmt->execute([
                 $data['id_empresa'],
-                date('Y-m-d H:i:s'), // created_at
+                $data['created_at'], // created_at from request
                 $data['created_by']
             ]);
 
