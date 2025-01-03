@@ -13,8 +13,8 @@ try {
 
         $stmt = $db->prepare('
             SELECT e.*, 
-                   ue.nombre AS nombre_evaluador, 
-                   ur.nombre AS nombre_responsable
+                   ue.id_usuario AS evaluador_id, ue.nombre AS evaluador_nombre, ue.email AS evaluador_email, 
+                   ur.id_usuario AS responsable_id, ur.nombre AS responsable_nombre, ur.email AS responsable_email
             FROM evaluacion e
             LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
             LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
@@ -25,6 +25,20 @@ try {
         $evaluacion = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($evaluacion) {
+            $evaluacion['evaluador'] = [
+                'id_usuario' => $evaluacion['evaluador_id'],
+                'nombre' => $evaluacion['evaluador_nombre'],
+                'email' => $evaluacion['evaluador_email']
+            ];
+            unset($evaluacion['evaluador_id'], $evaluacion['evaluador_nombre'], $evaluacion['evaluador_email']);
+
+            $evaluacion['responsable'] = [
+                'id_usuario' => $evaluacion['responsable_id'],
+                'nombre' => $evaluacion['responsable_nombre'],
+                'email' => $evaluacion['responsable_email']
+            ];
+            unset($evaluacion['responsable_id'], $evaluacion['responsable_nombre'], $evaluacion['responsable_email']);
+
             $logger->write('Evaluacion data fetched: ' . json_encode($evaluacion));
             echo json_encode($evaluacion);
         } else {
@@ -38,8 +52,8 @@ try {
 
         $stmt = $db->prepare('
             SELECT e.*, 
-                   ue.nombre AS nombre_evaluador, 
-                   ur.nombre AS nombre_responsable
+                   ue.id_usuario AS evaluador_id, ue.nombre AS evaluador_nombre, ue.email AS evaluador_email, 
+                   ur.id_usuario AS responsable_id, ur.nombre AS responsable_nombre, ur.email AS responsable_email
             FROM evaluacion e
             LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
             LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
@@ -50,6 +64,22 @@ try {
         $evaluaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($evaluaciones) {
+            foreach ($evaluaciones as &$evaluacion) {
+                $evaluacion['evaluador'] = [
+                    'id_usuario' => $evaluacion['evaluador_id'],
+                    'nombre' => $evaluacion['evaluador_nombre'],
+                    'email' => $evaluacion['evaluador_email']
+                ];
+                unset($evaluacion['evaluador_id'], $evaluacion['evaluador_nombre'], $evaluacion['evaluador_email']);
+
+                $evaluacion['responsable'] = [
+                    'id_usuario' => $evaluacion['responsable_id'],
+                    'nombre' => $evaluacion['responsable_nombre'],
+                    'email' => $evaluacion['responsable_email']
+                ];
+                unset($evaluacion['responsable_id'], $evaluacion['responsable_nombre'], $evaluacion['responsable_email']);
+            }
+
             $logger->write('Evaluaciones data fetched: ' . json_encode($evaluaciones));
             echo json_encode($evaluaciones);
         } else {
@@ -62,8 +92,8 @@ try {
 
         $stmt = $db->query('
             SELECT e.*, 
-                   ue.nombre AS nombre_evaluador, 
-                   ur.nombre AS nombre_responsable
+                   ue.id_usuario AS evaluador_id, ue.nombre AS evaluador_nombre, ue.email AS evaluador_email, 
+                   ur.id_usuario AS responsable_id, ur.nombre AS responsable_nombre, ur.email AS responsable_email
             FROM evaluacion e
             LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
             LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
@@ -71,8 +101,30 @@ try {
         ');
         $evaluaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $logger->write('All evaluacion data fetched: ' . json_encode($evaluaciones));
-        echo json_encode($evaluaciones);
+        if ($evaluaciones) {
+            foreach ($evaluaciones as &$evaluacion) {
+                $evaluacion['evaluador'] = [
+                    'id_usuario' => $evaluacion['evaluador_id'],
+                    'nombre' => $evaluacion['evaluador_nombre'],
+                    'email' => $evaluacion['evaluador_email']
+                ];
+                unset($evaluacion['evaluador_id'], $evaluacion['evaluador_nombre'], $evaluacion['evaluador_email']);
+
+                $evaluacion['responsable'] = [
+                    'id_usuario' => $evaluacion['responsable_id'],
+                    'nombre' => $evaluacion['responsable_nombre'],
+                    'email' => $evaluacion['responsable_email']
+                ];
+                unset($evaluacion['responsable_id'], $evaluacion['responsable_nombre'], $evaluacion['responsable_email']);
+            }
+
+            $logger->write('All evaluacion data fetched: ' . json_encode($evaluaciones));
+            echo json_encode($evaluaciones);
+        } else {
+            $logger->write('No evaluaciones found');
+            http_response_code(404);
+            echo json_encode(['message' => 'No se encontraron evaluaciones']);
+        }
     }
 } catch (Exception $e) {
     $logger->write('Error: ' . $e->getMessage());
