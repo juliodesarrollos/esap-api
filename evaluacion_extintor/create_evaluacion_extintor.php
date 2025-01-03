@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     id_evaluacion, id_extintor, evaluacion_cilindro, evaluacion_manguera, evaluacion_valvula, 
                     evaluacion_manometro, evaluacion_presion_peso, evaluacion_seguro_sello, evaluacion_señalamiento, 
                     evaluacion_etiqueta, evaluacion_soporte, evaluacion_collarin, evaluacion_rueda_um, 
-                    evaluacion_gabinete_bolsa, comentario_evaluacion, created_at, created_by
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    evaluacion_gabinete_bolsa, comentario_evaluacion, created_at, created_by, status
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
 
             foreach ($data['evaluaciones'] as $evaluacion) {
@@ -39,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $evaluacion['evaluacion_gabinete_bolsa'],
                     $evaluacion['comentario_evaluacion'],
                     $evaluacion['created_at'],
-                    $evaluacion['created_by']
+                    $evaluacion['created_by'],
+                    $evaluacion['status']
                 ]);
             }
 
