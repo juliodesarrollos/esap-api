@@ -102,6 +102,19 @@ if (strpos($url, '/login') !== false) {
         http_response_code(405);
         echo json_encode(['message' => 'Método no permitido']);
     }
+} elseif (strpos($url, '/evaluacionExtintor') !== false) {
+    switch ($_SERVER['REQUEST_METHOD']) {
+        case 'POST':
+            require 'evaluacion_extintor/create_evaluacion_extintor.php';
+            break;
+        case 'GET':
+            require 'evaluacion_extintor/read_evaluacion_extintor.php';
+            break;
+        default:
+            http_response_code(405);
+            echo json_encode(['message' => 'Método no permitido']);
+            break;
+    }
 } elseif (strpos($url, '/evaluacion') !== false) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':

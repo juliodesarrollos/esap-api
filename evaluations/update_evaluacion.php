@@ -8,16 +8,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Update evaluacion request received: ' . json_encode($data));
 
-    if (isset($data['id_evaluacion'], $data['id_servicio'], $data['created_at'], $data['status'])) {
+    if (isset($data['id_evaluacion'], $data['status'])) {
         try {
-            // Actualizar la evaluación
-            $stmt = $db->prepare('UPDATE evaluacion SET id_servicio = ?, created_at = ?, status = ? WHERE id_evaluacion = ?');
-            $result = $stmt->execute([
-                $data['id_servicio'],
-                $data['created_at'],
-                $data['status'],
-                $data['id_evaluacion']
-            ]);
+            if ($data['status'] === 'initiated' && isset($data['id_evaluador'])) {
+                // Actualizar la evaluación con id_evaluador y status
+                $stmt = $db->prepare('UPDATE evaluacion SET id_evaluador = ?, status = ? WHERE id_evaluacion = ?');
+                $result = $stmt->execute([
+                    $data['id_evaluador'],
+                    $data['status'],
+                    $data['id_evaluacion']
+                ]);
+            } elseif ($data['status'] === 'evaluated' && isset($data['id_responsable'])) {
+                // Actualizar la evaluación con id_responsable y status
+                $stmt = $db->prepare('UPDATE evaluacion SET id_responsable = ?, status = ? WHERE id_evaluacion = ?');
+                $result = $stmt->execute([
+                    $data['id_responsable'],
+                    $data['status'],
+                    $data['id_evaluacion']
+                ]);
+            } else {
+                $logger->write('Invalid data for update: ' . json_encode($data));
+                http_response_code(400);
+                echo json_encode(['message' => 'Datos inválidos para la actualización']);
+                exit;
+            }
 
             if ($result) {
                 $logger->write('Evaluacion updated successfully: ' . json_encode($data));
