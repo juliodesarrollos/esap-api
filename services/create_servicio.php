@@ -28,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $created_at = new DateTime($data['created_at']);
                 for ($i = 0; $i < 12; $i++) {
                     $evaluation_date = $created_at->format('Y-m-d H:i:s');
-                    $stmt = $db->prepare('INSERT INTO evaluacion (id_servicio, created_at) VALUES (?, ?)');
-                    $stmt->execute([$id_servicio, $evaluation_date]);
+                    $stmt = $db->prepare('INSERT INTO evaluacion (id_servicio, created_at, status) VALUES (?, ?, ?)');
+                    $stmt->execute([$id_servicio, $evaluation_date, 'created']);
                     $created_at->modify('+1 month');
                 }
 

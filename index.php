@@ -102,6 +102,19 @@ if (strpos($url, '/login') !== false) {
         http_response_code(405);
         echo json_encode(['message' => 'Método no permitido']);
     }
+} elseif (strpos($url, '/evaluacion') !== false) {
+    switch ($_SERVER['REQUEST_METHOD']) {
+        case 'GET':
+            require 'evaluations/read_evaluacion.php';
+            break;
+        case 'PUT':
+            require 'evaluations/update_evaluacion.php';
+            break;
+        default:
+            http_response_code(405);
+            echo json_encode(['message' => 'Método no permitido']);
+            break;
+    }
 } elseif (strpos($url, '/view_log') !== false) {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         require 'view_log.php';

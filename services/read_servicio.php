@@ -34,7 +34,7 @@ try {
 
         $stmt = $db->prepare('
             SELECT s.*, 
-                   (SELECT COUNT(*) FROM evaluacion e WHERE e.id_servicio = s.id_servicio) AS numero_evaluaciones
+                   (SELECT COUNT(*) FROM evaluacion e WHERE e.id_servicio = s.id_servicio AND status = "completed") AS numero_evaluaciones
             FROM servicio s
             WHERE s.id_empresa = ?
             ORDER BY s.id_servicio ASC
