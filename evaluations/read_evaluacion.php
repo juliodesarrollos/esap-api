@@ -13,8 +13,8 @@ try {
 
         $stmt = $db->prepare('
             SELECT e.*, 
-                   ue.id_usuario AS evaluador_id, ue.nombre AS evaluador_nombre, ue.email AS evaluador_email, 
-                   ur.id_usuario AS responsable_id, ur.nombre AS responsable_nombre, ur.email AS responsable_email
+                   ue.id_usuario AS evaluador_id, ue.nombre_usuario AS evaluador_nombre, ue.correo_usuario AS evaluador_email, 
+                   ur.id_usuario AS responsable_id, ur.nombre_usuario AS responsable_nombre, ur.correo_usuario AS responsable_email
             FROM evaluacion e
             LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
             LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
@@ -27,15 +27,15 @@ try {
         if ($evaluacion) {
             $evaluacion['evaluador'] = [
                 'id_usuario' => $evaluacion['evaluador_id'],
-                'nombre' => $evaluacion['evaluador_nombre'],
-                'email' => $evaluacion['evaluador_email']
+                'nombre_usuario' => $evaluacion['evaluador_nombre'],
+                'correo_usuario' => $evaluacion['evaluador_email']
             ];
             unset($evaluacion['evaluador_id'], $evaluacion['evaluador_nombre'], $evaluacion['evaluador_email']);
 
             $evaluacion['responsable'] = [
                 'id_usuario' => $evaluacion['responsable_id'],
-                'nombre' => $evaluacion['responsable_nombre'],
-                'email' => $evaluacion['responsable_email']
+                'nombre_usuario' => $evaluacion['responsable_nombre'],
+                'correo_usuario' => $evaluacion['responsable_email']
             ];
             unset($evaluacion['responsable_id'], $evaluacion['responsable_nombre'], $evaluacion['responsable_email']);
 
@@ -52,8 +52,8 @@ try {
 
         $stmt = $db->prepare('
             SELECT e.*, 
-                   ue.id_usuario AS evaluador_id, ue.nombre AS evaluador_nombre, ue.email AS evaluador_email, 
-                   ur.id_usuario AS responsable_id, ur.nombre AS responsable_nombre, ur.email AS responsable_email
+                   ue.id_usuario AS evaluador_id, ue.nombre_usuario AS evaluador_nombre, ue.correo_usuario AS evaluador_email, 
+                   ur.id_usuario AS responsable_id, ur.nombre_usuario AS responsable_nombre, ur.correo_usuario AS responsable_email
             FROM evaluacion e
             LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
             LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
@@ -67,15 +67,15 @@ try {
             foreach ($evaluaciones as &$evaluacion) {
                 $evaluacion['evaluador'] = [
                     'id_usuario' => $evaluacion['evaluador_id'],
-                    'nombre' => $evaluacion['evaluador_nombre'],
-                    'email' => $evaluacion['evaluador_email']
+                    'nombre_usuario' => $evaluacion['evaluador_nombre'],
+                    'correo_usuario' => $evaluacion['evaluador_email']
                 ];
                 unset($evaluacion['evaluador_id'], $evaluacion['evaluador_nombre'], $evaluacion['evaluador_email']);
 
                 $evaluacion['responsable'] = [
                     'id_usuario' => $evaluacion['responsable_id'],
-                    'nombre' => $evaluacion['responsable_nombre'],
-                    'email' => $evaluacion['responsable_email']
+                    'nombre_usuario' => $evaluacion['responsable_nombre'],
+                    'correo_usuario' => $evaluacion['responsable_email']
                 ];
                 unset($evaluacion['responsable_id'], $evaluacion['responsable_nombre'], $evaluacion['responsable_email']);
             }
@@ -92,8 +92,8 @@ try {
 
         $stmt = $db->query('
             SELECT e.*, 
-                   ue.id_usuario AS evaluador_id, ue.nombre AS evaluador_nombre, ue.email AS evaluador_email, 
-                   ur.id_usuario AS responsable_id, ur.nombre AS responsable_nombre, ur.email AS responsable_email
+                   ue.id_usuario AS evaluador_id, ue.nombre_usuario AS evaluador_nombre, ue.correo_usuario AS evaluador_email, 
+                   ur.id_usuario AS responsable_id, ur.nombre_usuario AS responsable_nombre, ur.correo_usuario AS responsable_email
             FROM evaluacion e
             LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
             LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
@@ -105,15 +105,15 @@ try {
             foreach ($evaluaciones as &$evaluacion) {
                 $evaluacion['evaluador'] = [
                     'id_usuario' => $evaluacion['evaluador_id'],
-                    'nombre' => $evaluacion['evaluador_nombre'],
-                    'email' => $evaluacion['evaluador_email']
+                    'nombre_usuario' => $evaluacion['evaluador_nombre'],
+                    'correo_usuario' => $evaluacion['evaluador_email']
                 ];
                 unset($evaluacion['evaluador_id'], $evaluacion['evaluador_nombre'], $evaluacion['evaluador_email']);
 
                 $evaluacion['responsable'] = [
                     'id_usuario' => $evaluacion['responsable_id'],
-                    'nombre' => $evaluacion['responsable_nombre'],
-                    'email' => $evaluacion['responsable_email']
+                    'nombre_usuario' => $evaluacion['responsable_nombre'],
+                    'correo_usuario' => $evaluacion['responsable_email']
                 ];
                 unset($evaluacion['responsable_id'], $evaluacion['responsable_nombre'], $evaluacion['responsable_email']);
             }
