@@ -12,10 +12,14 @@ try {
         $logger->write('Fetching evaluacion with ID: ' . $id_evaluacion);
 
         $stmt = $db->prepare('
-            SELECT * 
-            FROM evaluacion 
-            WHERE id_evaluacion = ?
-            ORDER BY id_evaluacion ASC
+            SELECT e.*, 
+                   ue.nombre AS nombre_evaluador, 
+                   ur.nombre AS nombre_responsable
+            FROM evaluacion e
+            LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
+            LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
+            WHERE e.id_evaluacion = ?
+            ORDER BY e.id_evaluacion ASC
         ');
         $stmt->execute([$id_evaluacion]);
         $evaluacion = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -33,10 +37,14 @@ try {
         $logger->write('Fetching evaluaciones with servicio ID: ' . $id_servicio);
 
         $stmt = $db->prepare('
-            SELECT * 
-            FROM evaluacion 
-            WHERE id_servicio = ?
-            ORDER BY id_evaluacion ASC
+            SELECT e.*, 
+                   ue.nombre AS nombre_evaluador, 
+                   ur.nombre AS nombre_responsable
+            FROM evaluacion e
+            LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
+            LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
+            WHERE e.id_servicio = ?
+            ORDER BY e.id_evaluacion ASC
         ');
         $stmt->execute([$id_servicio]);
         $evaluaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -53,9 +61,13 @@ try {
         $logger->write('Fetching all evaluaciones');
 
         $stmt = $db->query('
-            SELECT * 
-            FROM evaluacion 
-            ORDER BY id_evaluacion ASC
+            SELECT e.*, 
+                   ue.nombre AS nombre_evaluador, 
+                   ur.nombre AS nombre_responsable
+            FROM evaluacion e
+            LEFT JOIN usuario ue ON e.id_evaluador = ue.id_usuario
+            LEFT JOIN usuario ur ON e.id_responsable = ur.id_usuario
+            ORDER BY e.id_evaluacion ASC
         ');
         $evaluaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
