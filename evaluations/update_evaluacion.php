@@ -6,25 +6,25 @@ $logger = new Log();
 
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
-    $logger->write('Update evaluacion request received: ' . json_encode($data));
+    $logger->write('Update evaluacion_extintor request received: ' . json_encode($data));
 
-    if (isset($data['id_evaluacion'], $data['status'])) {
+    if (isset($data['id_evaluacion_extintor'], $data['status'])) {
         try {
             if ($data['status'] === 'initiated' && isset($data['id_evaluador'])) {
                 // Actualizar la evaluación con id_evaluador y status
-                $stmt = $db->prepare('UPDATE evaluacion SET id_evaluador = ?, status = ? WHERE id_evaluacion = ?');
+                $stmt = $db->prepare('UPDATE evaluacion_extintor SET id_evaluador = ?, status = ? WHERE id_evaluacion_extintor = ?');
                 $result = $stmt->execute([
                     $data['id_evaluador'],
                     $data['status'],
-                    $data['id_evaluacion']
+                    $data['id_evaluacion_extintor']
                 ]);
-            } elseif ($data['status'] === 'evaluated' && isset($data['id_responsable'])) {
+            } elseif ($data['status'] === 'terminated' && isset($data['id_responsable'])) {
                 // Actualizar la evaluación con id_responsable y status
-                $stmt = $db->prepare('UPDATE evaluacion SET id_responsable = ?, status = ? WHERE id_evaluacion = ?');
+                $stmt = $db->prepare('UPDATE evaluacion_extintor SET id_responsable = ?, status = ? WHERE id_evaluacion_extintor = ?');
                 $result = $stmt->execute([
                     $data['id_responsable'],
                     $data['status'],
-                    $data['id_evaluacion']
+                    $data['id_evaluacion_extintor']
                 ]);
             } else {
                 $logger->write('Invalid data for update: ' . json_encode($data));
@@ -34,19 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             }
 
             if ($result) {
-                $logger->write('Evaluacion updated successfully: ' . json_encode($data));
+                $logger->write('Evaluacion_extintor updated successfully: ' . json_encode($data));
                 http_response_code(200);
-                echo json_encode(['message' => 'Evaluacion actualizada']);
+                echo json_encode(['message' => 'Evaluacion_extintor actualizada']);
             } else {
                 $errorInfo = $stmt->errorInfo();
-                $logger->write('Failed to update evaluacion: ' . json_encode($errorInfo));
+                $logger->write('Failed to update evaluacion_extintor: ' . json_encode($errorInfo));
                 http_response_code(500);
-                echo json_encode(['message' => 'Error al actualizar la evaluacion', 'error' => $errorInfo]);
+                echo json_encode(['message' => 'Error al actualizar la evaluacion_extintor', 'error' => $errorInfo]);
             }
         } catch (PDOException $e) {
             $logger->write('PDOException: ' . $e->getMessage());
             http_response_code(500);
-            echo json_encode(['message' => 'Error al actualizar la evaluacion', 'error' => $e->getMessage()]);
+            echo json_encode(['message' => 'Error al actualizar la evaluacion_extintor', 'error' => $e->getMessage()]);
         }
     } else {
         $logger->write('Missing required fields in PUT data: ' . json_encode($data));
