@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Create evaluacion_extintor request received: ' . json_encode($data));
 
-    if (isset($data['evaluaciones']) && is_array($data['evaluaciones'])) {
+    if (is_array($data)) {
         try {
             $db->beginTransaction();
 
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)
             ');
 
-            foreach ($data['evaluaciones'] as $evaluacion) {
+            foreach ($data as $evaluacion) {
                 $stmt->execute([
                     $evaluacion['id_evaluacion'],
                     $evaluacion['id_extintor'],
