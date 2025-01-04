@@ -12,7 +12,7 @@ try {
         $logger->write('Fetching evaluacion_extintor with ID: ' . $id_evaluacion);
 
         $stmt = $db->prepare('
-            SELECT ee.*, e.id_extintor AS extintor_id, e.*, m.nombre AS marca, a.nombre AS agente
+            SELECT ee.*, e.id_extintor AS extintor_id, e.*, m.marca AS marca, a.agente AS agente
             FROM evaluacion_extintor ee
             JOIN extintor e ON ee.id_extintor = e.id_extintor
             JOIN marca m ON e.id_marca = m.id_marca
