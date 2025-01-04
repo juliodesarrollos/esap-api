@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require '../db.php';
 
 $db = Database::getInstance();
 $logger = new Log();
@@ -12,7 +12,7 @@ try {
         $logger->write('Fetching evaluacion_extintor with ID: ' . $id_evaluacion);
 
         $stmt = $db->prepare('
-            SELECT ee.*, e.*
+            SELECT ee.*, e.id_extintor AS extintor_id, e.*
             FROM evaluacion_extintor ee
             JOIN extintor e ON ee.id_extintor = e.id_extintor
             WHERE ee.id_evaluacion = ?
@@ -22,8 +22,22 @@ try {
         $evaluaciones_extintor = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($evaluaciones_extintor) {
-            $logger->write('Evaluacion_extintor data fetched: ' . json_encode($evaluaciones_extintor));
-            echo json_encode($evaluaciones_extintor);
+            $result = [];
+            foreach ($evaluaciones_extintor as $evaluacion) {
+                $extintor = [
+                    'id_extintor' => $evaluacion['extintor_id'],
+                    'nombre_extintor' => $evaluacion['nombre_extintor'],
+                    'tipo_extintor' => $evaluacion['tipo_extintor'],
+                    'capacidad_extintor' => $evaluacion['capacidad_extintor'],
+                    'fecha_fabricacion' => $evaluacion['fecha_fabricacion'],
+                    // Agrega aquí otros campos del extintor según sea necesario
+                ];
+                unset($evaluacion['extintor_id'], $evaluacion['nombre_extintor'], $evaluacion['tipo_extintor'], $evaluacion['capacidad_extintor'], $evaluacion['fecha_fabricacion']);
+                $evaluacion['extintor'] = $extintor;
+                $result[] = $evaluacion;
+            }
+            $logger->write('Evaluacion_extintor data fetched: ' . json_encode($result));
+            echo json_encode($result);
         } else {
             $logger->write('No evaluacion_extintor found with ID: ' . $id_evaluacion);
             http_response_code(404);
