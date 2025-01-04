@@ -15,7 +15,7 @@ try {
             SELECT * 
             FROM evaluacion_extintor 
             WHERE id_evaluacion = ?
-            ORDER BY id_evaluacion_servicio ASC
+            ORDER BY id_evaluacion_extintor ASC
         ');
         $stmt->execute([$id_evaluacion]);
         $evaluaciones_extintor = $stmt->fetchAll(PDO::FETCH_ASSOC);
