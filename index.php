@@ -110,6 +110,9 @@ if (strpos($url, '/login') !== false) {
         case 'GET':
             require 'evaluacion_extintor/read_evaluacion_extintor.php';
             break;
+        case 'PUT':
+            require 'evaluacion_extintor/update_evaluacion_extintor.php';
+            break;
         default:
             http_response_code(405);
             echo json_encode(['message' => 'Método no permitido']);
