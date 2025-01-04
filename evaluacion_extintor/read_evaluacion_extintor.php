@@ -12,10 +12,11 @@ try {
         $logger->write('Fetching evaluacion_extintor with ID: ' . $id_evaluacion);
 
         $stmt = $db->prepare('
-            SELECT * 
-            FROM evaluacion_extintor 
-            WHERE id_evaluacion = ?
-            ORDER BY id_evaluacion_extintor ASC
+            SELECT ee.*, e.*
+            FROM evaluacion_extintor ee
+            JOIN extintor e ON ee.id_extintor = e.id_extintor
+            WHERE ee.id_evaluacion = ?
+            ORDER BY ee.id_evaluacion_extintor ASC
         ');
         $stmt->execute([$id_evaluacion]);
         $evaluaciones_extintor = $stmt->fetchAll(PDO::FETCH_ASSOC);
