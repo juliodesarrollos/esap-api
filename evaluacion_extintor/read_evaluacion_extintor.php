@@ -12,9 +12,11 @@ try {
         $logger->write('Fetching evaluacion_extintor with ID: ' . $id_evaluacion);
 
         $stmt = $db->prepare('
-            SELECT ee.*, e.id_extintor AS extintor_id, e.*
+            SELECT ee.*, e.id_extintor AS extintor_id, e.*, m.nombre AS marca, a.nombre AS agente
             FROM evaluacion_extintor ee
             JOIN extintor e ON ee.id_extintor = e.id_extintor
+            JOIN marca m ON e.id_marca = m.id_marca
+            JOIN agente a ON e.id_agente = a.id_agente
             WHERE ee.id_evaluacion = ?
             ORDER BY ee.id_evaluacion_extintor ASC
         ');
@@ -26,13 +28,24 @@ try {
             foreach ($evaluaciones_extintor as $evaluacion) {
                 $extintor = [
                     'id_extintor' => $evaluacion['extintor_id'],
-                    'nombre_extintor' => $evaluacion['nombre_extintor'],
-                    'tipo_extintor' => $evaluacion['tipo_extintor'],
-                    'capacidad_extintor' => $evaluacion['capacidad_extintor'],
-                    'fecha_fabricacion' => $evaluacion['fecha_fabricacion'],
+                    'id_empresa' => $evaluacion['id_empresa'],
+                    'posicion_extintor' => $evaluacion['posicion_extintor'],
+                    'id_agente' => $evaluacion['id_agente'],
+                    'agente' => $evaluacion['agente'],
+                    'id_capacidad' => $evaluacion['id_capacidad'],
+                    'capacidad' => $evaluacion['capacidad'],
+                    'id_marca' => $evaluacion['id_marca'],
+                    'marca' => $evaluacion['marca'],
+                    'fecha_fabricacion_extintor' => $evaluacion['fecha_fabricacion_extintor'],
+                    'extintor_activo' => $evaluacion['extintor_activo'],
+                    'baja_extintor' => $evaluacion['baja_extintor'],
+                    'fecha_servicio' => $evaluacion['fecha_servicio'],
+                    'fecha_prueba' => $evaluacion['fecha_prueba'],
+                    'created_at' => $evaluacion['created_at'],
+                    'created_by' => $evaluacion['created_by'],
                     // Agrega aquí otros campos del extintor según sea necesario
                 ];
-                unset($evaluacion['extintor_id'], $evaluacion['nombre_extintor'], $evaluacion['tipo_extintor'], $evaluacion['capacidad_extintor'], $evaluacion['fecha_fabricacion']);
+                unset($evaluacion['extintor_id'], $evaluacion['id_empresa'], $evaluacion['posicion_extintor'], $evaluacion['id_agente'], $evaluacion['agente'], $evaluacion['id_capacidad'], $evaluacion['capacidad'], $evaluacion['id_marca'], $evaluacion['marca'], $evaluacion['fecha_fabricacion_extintor'], $evaluacion['extintor_activo'], $evaluacion['baja_extintor'], $evaluacion['fecha_servicio'], $evaluacion['fecha_prueba'], $evaluacion['created_at'], $evaluacion['created_by']);
                 $evaluacion['extintor'] = $extintor;
                 $result[] = $evaluacion;
             }
