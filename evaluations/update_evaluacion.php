@@ -10,6 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode($post_vars['data'], true);
     $logger->write('Update evaluacion request received: ' . json_encode($data));
 
+    if (isset($_FILES['firma']) && $_FILES['firma']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../firmas/';
+        $firmaPath = $uploadDir . $data['id_evaluacion'] . '.png';
+        if (!move_uploaded_file($_FILES['firma']['tmp_name'], $firmaPath)) {
+            throw new Exception('Error al mover el archivo de firma');
+        }
+        $logger->write('Firma guardada en: ' . $firmaPath);
+    } else {
+        $logger->write('Error al guardar la firma');
+    }
+    
     if (isset($data['id_evaluacion'], $data['status'])) {
         try {
             if ($data['status'] === 'initiated' && isset($data['id_evaluador'])) {
