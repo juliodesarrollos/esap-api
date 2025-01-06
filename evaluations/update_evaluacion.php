@@ -7,7 +7,7 @@ $logger = new Log();
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     // Leer los datos de la solicitud PUT
     parse_str(file_get_contents("php://input"), $post_vars);
-    $data = json_decode($post_vars['data'], true);
+    $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Update evaluacion request received: ' . json_encode($data));
 
     if (isset($_FILES['firma']) && $_FILES['firma']['error'] === UPLOAD_ERR_OK) {
