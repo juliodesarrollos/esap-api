@@ -5,7 +5,8 @@ $db = Database::getInstance();
 $logger = new Log();
 
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    parse_str(file_get_contents("php://input"), $data);
+    // Parse the JSON data from the 'data' field
+    $data = json_decode($_POST['data'], true);
     $logger->write('Update evaluacion request received: ' . json_encode($data));
 
     if (isset($data['id_evaluacion'], $data['status'])) {
@@ -57,6 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $logger->write('PDOException: ' . $e->getMessage());
             http_response_code(500);
             echo json_encode(['message' => 'Error al actualizar la evaluacion', 'error' => $e->getMessage()]);
+        } catch (Exception $e) {
+            $logger->write('Exception: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['message' => 'Error al manejar la firma', 'error' => $e->getMessage()]);
         }
     } else {
         $logger->write('Missing required fields in PUT data: ' . json_encode($data));
