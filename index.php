@@ -126,6 +126,9 @@ if (strpos($url, '/login') !== false) {
         case 'PUT':
             require 'evaluations/update_evaluacion.php';
             break;
+        case 'POST':
+            require 'evaluations/update_evaluacion_firma.php';
+            break;
         default:
             http_response_code(405);
             echo json_encode(['message' => 'Método no permitido']);
