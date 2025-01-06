@@ -19,6 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                     $data['id_evaluacion']
                 ]);
             } elseif ($data['status'] === 'terminated' && isset($data['id_responsable'])) {
+                if (isset($_FILES['firma']) && $_FILES['firma']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = '../firmas/';
+                    $firmaPath = $uploadDir . $data['id_evaluacion'] . '.png';
+                    if (!move_uploaded_file($_FILES['firma']['tmp_name'], $firmaPath)) {
+                        throw new Exception('Error al mover el archivo de firma');
+                    }
+                    $logger->write('Firma guardada en: ' . $firmaPath);
+                } else {
+                    $logger->write('Error al guardar la firma');
+                }
                 // Actualizar la evaluación con id_responsable y status
                 $stmt = $db->prepare('UPDATE evaluacion SET id_responsable = ?, status = ? WHERE id_evaluacion = ?');
                 $result = $stmt->execute([
