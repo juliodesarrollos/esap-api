@@ -23,6 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($data['status'] === 'terminated' && isset($data['id_responsable'])) {
                     if (isset($_FILES['firma']) && $_FILES['firma']['error'] === UPLOAD_ERR_OK) {
                         $uploadDir = '../firmas/';
+                        // Verificar y crear el directorio si no existe
+                        if (!is_dir($uploadDir)) {
+                            mkdir($uploadDir, 0777, true);
+                        }
                         $firmaPath = $uploadDir . $data['id_evaluacion'] . '.png';
                         if (!move_uploaded_file($_FILES['firma']['tmp_name'], $firmaPath)) {
                             throw new Exception('Error al mover el archivo de firma');
