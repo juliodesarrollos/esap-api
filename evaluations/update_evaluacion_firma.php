@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ]);
                 } elseif ($data['status'] === 'terminated' && isset($data['id_responsable'])) {
                     if (isset($_FILES['firma']) && $_FILES['firma']['error'] === UPLOAD_ERR_OK) {
-                        $uploadDir = '../firmas/';
+                        $uploadDir = 'firmas/';
                         // Verificar y crear el directorio si no existe
                         if (!is_dir($uploadDir)) {
                             mkdir($uploadDir, 0777, true);
