@@ -5,7 +5,7 @@ $db = Database::getInstance();
 $logger = new Log();
 
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    $data = json_decode(file_get_contents('php://input'), true);
+    parse_str(file_get_contents("php://input"), $data);
     $logger->write('Update evaluacion request received: ' . json_encode($data));
 
     if (isset($data['id_evaluacion'], $data['status'])) {
