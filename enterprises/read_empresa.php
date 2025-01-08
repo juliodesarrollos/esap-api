@@ -7,7 +7,7 @@ $logger = new Log();
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $stmt = $db->prepare('
-            SELECT e.*, u.id_usuario, u.nombre_usuario, u.direccion_usuario, u.telefono_usuario, u.correo_usuario, u.contraseña_usuario, u.tipo_usuario, u.first_login, u.created_at AS usuario_created_at, u.created_by AS usuario_created_by
+            SELECT e.*, u.nombre_usuario
             FROM empresa e
             LEFT JOIN usuario u ON e.id_empresa = u.id_empresa
             AND u.id_usuario = (
@@ -22,20 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if ($empresas) {
             $result = [];
             foreach ($empresas as $empresa) {
-                $usuario = [
-                    'id_usuario' => $empresa['id_usuario'] ?? '',
-                    'id_empresa' => $empresa['id_empresa'] ?? '',
-                    'nombre_usuario' => $empresa['nombre_usuario'] ?? '',
-                    'direccion_usuario' => $empresa['direccion_usuario'] ?? '',
-                    'telefono_usuario' => $empresa['telefono_usuario'] ?? '',
-                    'correo_usuario' => $empresa['correo_usuario'] ?? '',
-                    'contraseña_usuario' => $empresa['contraseña_usuario'] ?? '',
-                    'tipo_usuario' => $empresa['tipo_usuario'] ?? '',
-                    'first_login' => $empresa['first_login'] ?? false,
-                    'created_at' => $empresa['usuario_created_at'] ?? '',
-                    'created_by' => $empresa['usuario_created_by'] ?? ''
-                ];
-                unset($empresa['id_usuario'], $empresa['nombre_usuario'], $empresa['direccion_usuario'], $empresa['telefono_usuario'], $empresa['correo_usuario'], $empresa['contraseña_usuario'], $empresa['tipo_usuario'], $empresa['first_login'], $empresa['usuario_created_at'], $empresa['usuario_created_by']);
+                $usuario = $empresa['nombre_usuario'] ?? 'Sin usuarios registrados';
+                unset($empresa['nombre_usuario']);
                 $empresa['usuario'] = $usuario;
                 $result[] = $empresa;
             }
