@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     'created_by' => $empresa['usuario_created_by'] ?? ''
                 ];
                 unset($empresa['id_usuario'], $empresa['nombre_usuario'], $empresa['direccion_usuario'], $empresa['telefono_usuario'], $empresa['correo_usuario'], $empresa['contraseña_usuario'], $empresa['tipo_usuario'], $empresa['first_login'], $empresa['usuario_created_at'], $empresa['usuario_created_by']);
-                $empresa['usuario'] = $usuario;
+                $empresa['responsable'] = $usuario;
                 $result[] = $empresa;
             }
             $logger->write('Empresas data fetched: ' . json_encode($result));
