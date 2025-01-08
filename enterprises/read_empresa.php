@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             foreach ($empresas as $empresa) {
                 $usuario = [
                     'id_usuario' => $empresa['id_usuario'] ?? '',
+                    'id_empresa' => $empresa['id_empresa'] ?? '',
                     'nombre_usuario' => $empresa['nombre_usuario'] ?? '',
                     'direccion_usuario' => $empresa['direccion_usuario'] ?? '',
                     'telefono_usuario' => $empresa['telefono_usuario'] ?? '',
