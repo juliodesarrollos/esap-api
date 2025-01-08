@@ -7,9 +7,9 @@ $logger = new Log();
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $stmt = $db->prepare('
-            SELECT e.*, u.id_usuario AS usuario_id, u.nombre AS usuario_nombre, u.email AS usuario_email
-            FROM empresas e
-            LEFT JOIN usuarios u ON e.id_empresa = u.id_empresa
+            SELECT e.*, u.*
+            FROM empresa e
+            LEFT JOIN usuario u ON e.id_empresa = u.id_empresa
             WHERE u.id_usuario = (
                 SELECT MIN(id_usuario)
                 FROM usuarios
