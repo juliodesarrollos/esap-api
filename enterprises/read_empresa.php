@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             LEFT JOIN usuario u ON e.id_empresa = u.id_empresa
             WHERE u.id_usuario = (
                 SELECT MIN(id_usuario)
-                FROM usuarios
+                FROM usuario
                 WHERE id_empresa = e.id_empresa
             )
         ');
