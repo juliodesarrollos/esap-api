@@ -22,21 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if ($empresas) {
             $result = [];
             foreach ($empresas as $empresa) {
-                $usuario = null;
-                if ($empresa['id_usuario']) {
-                    $usuario = [
-                        'id_usuario' => $empresa['id_usuario'],
-                        'nombre_usuario' => $empresa['nombre_usuario'],
-                        'direccion_usuario' => $empresa['direccion_usuario'],
-                        'telefono_usuario' => $empresa['telefono_usuario'],
-                        'correo_usuario' => $empresa['correo_usuario'],
-                        'contraseña_usuario' => $empresa['contraseña_usuario'],
-                        'tipo_usuario' => $empresa['tipo_usuario'],
-                        'first_login' => $empresa['first_login'],
-                        'created_at' => $empresa['usuario_created_at'],
-                        'created_by' => $empresa['usuario_created_by']
-                    ];
-                }
+                $usuario = [
+                    'id_usuario' => $empresa['id_usuario'] ?? '',
+                    'nombre_usuario' => $empresa['nombre_usuario'] ?? '',
+                    'direccion_usuario' => $empresa['direccion_usuario'] ?? '',
+                    'telefono_usuario' => $empresa['telefono_usuario'] ?? '',
+                    'correo_usuario' => $empresa['correo_usuario'] ?? '',
+                    'contraseña_usuario' => $empresa['contraseña_usuario'] ?? '',
+                    'tipo_usuario' => $empresa['tipo_usuario'] ?? '',
+                    'first_login' => $empresa['first_login'] ?? false,
+                    'created_at' => $empresa['usuario_created_at'] ?? '',
+                    'created_by' => $empresa['usuario_created_by'] ?? ''
+                ];
                 unset($empresa['id_usuario'], $empresa['nombre_usuario'], $empresa['direccion_usuario'], $empresa['telefono_usuario'], $empresa['correo_usuario'], $empresa['contraseña_usuario'], $empresa['tipo_usuario'], $empresa['first_login'], $empresa['usuario_created_at'], $empresa['usuario_created_by']);
                 $empresa['usuario'] = $usuario;
                 $result[] = $empresa;
