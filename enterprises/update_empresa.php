@@ -8,13 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Update empresa request received: ' . json_encode($data));
 
-    if (isset($data['id_empresa'], $data['nombre_empresa'], $data['direccion_empresa'], $data['telefono_empresa'], $data['correo_empresa'], $data['prefijo_empresa'])) {
+    if (isset($data['id_empresa'], $data['nombre_empresa'], $data['direccion_empresa'], $data['telefono_empresa'], $data['correo_empresa'], $data['razon_social'], $data['prefijo_empresa'])) {
         $id_empresa = $data['id_empresa'];
         $nombre = $data['nombre_empresa'];
         $direccion = $data['direccion_empresa'];
         $telefono = $data['telefono_empresa'];
         $correo = $data['correo_empresa'];
         $prefijo = $data['prefijo_empresa'];
+        $razon_social = $data['razon_social'];
 
         try {
             // Verificar si el correo ya existe para otra empresa
@@ -30,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             }
 
             // Actualizar la empresa
-            $stmt = $db->prepare('UPDATE empresa SET nombre_empresa = ?, direccion_empresa = ?, telefono_empresa = ?, correo_empresa = ?, prefijo_empresa = ? WHERE id_empresa = ?');
-            $result = $stmt->execute([$nombre, $direccion, $telefono, $correo, $prefijo, $id_empresa]);
+            $stmt = $db->prepare('UPDATE empresa SET nombre_empresa = ?, direccion_empresa = ?, telefono_empresa = ?, correo_empresa = ?, prefijo_empresa = ?, razon_social = ? WHERE id_empresa = ?');
+            $result = $stmt->execute([$nombre, $direccion, $telefono, $correo, $prefijo, $razon_social, $id_empresa]);
 
             if ($result) {
                 $logger->write('Empresa updated: ' . json_encode($data));
