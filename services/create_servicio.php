@@ -8,16 +8,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Create servicio request received: ' . json_encode($data));
 
-    if (isset($data['id_empresa'], $data['created_by'], $data['created_at'])) {
+    if (isset($data['id_empresa'], $data['created_by'], $data['created_at'], $data['ot'])) {
         try {
             $db->beginTransaction();
 
             // Insertar el nuevo servicio
-            $stmt = $db->prepare('INSERT INTO servicio (id_empresa, created_at, created_by) VALUES (?, ?, ?)');
+            $stmt = $db->prepare('INSERT INTO servicio (id_empresa, created_at, created_by, ot) VALUES (?, ?, ?, ?)');
             $result = $stmt->execute([
                 $data['id_empresa'],
                 $data['created_at'], // created_at from request
-                $data['created_by']
+                $data['created_by'],
+                $data['ot']
             ]);
 
             if ($result) {
@@ -44,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 http_response_code(500);
                 echo json_encode(['message' => 'Error al crear el servicio', 'error' => $errorInfo]);
             }
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollBack();
-            $logger->write('PDOException: ' . $e->getMessage());
+            $logger->write('Exception: ' . $e->getMessage());
             http_response_code(500);
             echo json_encode(['message' => 'Error al crear el servicio', 'error' => $e->getMessage()]);
         }
