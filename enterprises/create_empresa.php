@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $logger->write('Create empresa request received: ' . json_encode($data));
 
-    if (isset($data['nombre_empresa'], $data['direccion_empresa'], $data['telefono_empresa'], $data['correo_empresa'], $data['contraseña_empresa'], $data['prefijo_empresa'], $data['created_by'])) {
+    if (isset($data['nombre_empresa'], $data['direccion_empresa'], $data['telefono_empresa'], $data['correo_empresa'], $data['contraseña_empresa'], $data['prefijo_empresa'], $data['razon_social'], $data['created_by'])) {
         $nombre = $data['nombre_empresa'];
         $direccion = $data['direccion_empresa'];
         $telefono = $data['telefono_empresa'];
@@ -17,9 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $prefijo = $data['prefijo_empresa'];
         $created_by = $data['created_by'];
         $created_at = date('Y-m-d H:i:s');
+        $razon_social = $data['razon_social'];
 
-        $stmt = $db->prepare('INSERT INTO empresa (nombre_empresa, direccion_empresa, telefono_empresa, correo_empresa, contraseña_empresa, prefijo_empresa, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->execute([$nombre, $direccion, $telefono, $correo, $contraseña, $prefijo, $created_at, $created_by]);
+        $stmt = $db->prepare('INSERT INTO empresa (nombre_empresa, direccion_empresa, telefono_empresa, correo_empresa, contraseña_empresa, prefijo_empresa, created_at, created_by, razon_social) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$nombre, $direccion, $telefono, $correo, $contraseña, $prefijo, $created_at, $created_by, $razon_social]);
 
         http_response_code(201);
         $logger->write('Empresa created: ' . json_encode($data));
