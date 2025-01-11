@@ -13,8 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->beginTransaction();
 
             // Insertar el nuevo usuario
-            $stmt = $db->prepare('INSERT INTO usuario (nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt = $db->prepare('INSERT INTO usuario (id_empresa, nombre_usuario, direccion_usuario, telefono_usuario, correo_usuario, contraseña_usuario, tipo_usuario, first_login, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $result = $stmt->execute([
+                $data['id_empresa'],
                 $data['nombre_usuario'],
                 $data['direccion_usuario'],
                 $data['telefono_usuario'],
