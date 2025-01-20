@@ -5,6 +5,8 @@ $url = $_SERVER['REQUEST_URI'];
 
 if (strpos($url, '/login') !== false) {
     require 'login.php';
+} elseif(strpos($url, '/change_password')) {
+    require 'change_password.php';
 } elseif (strpos($url, '/usuarios') !== false) {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':

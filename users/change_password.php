@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // Actualizar la contraseña
             $stmt = $db->prepare('UPDATE usuario SET contraseña_usuario = ? WHERE id_usuario = ?');
-            $result = $stmt->execute([password_hash($nueva_contraseña, PASSWORD_DEFAULT), $id_usuario]);
+            $result = $stmt->execute([password_hash($nueva_contraseña, PASSWORD_BCRYPT), $id_usuario]);
 
             if ($result) {
                 $logger->write('Password updated for user ID: ' . $id_usuario);
