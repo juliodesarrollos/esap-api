@@ -12,8 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $correo = $data['correo_usuario'];
         $contraseña = $data['contraseña_usuario'];
 
-        $stmt = $db->prepare('SELECT * FROM usuario WHERE correo_usuario = ?');
-        $stmt->execute([$correo]);
+        $stmt = $db->prepare('
+            SELECT u.*, e.prefijo_empresa 
+            FROM usuario u
+            JOIN empresa e ON u.id_empresa = e.id_empresa
+            WHERE u.correo_usuario = ? AND e.prefijo_empresa = ?
+        ');
+        $stmt->execute([$correo, 'ESAPE']);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($contraseña, $user['contraseña_usuario'])) {
@@ -25,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $logger->write('Login failed for: ' . $correo);
             http_response_code(401);
-            echo json_encode(['message' => 'Correo o contraseña incorrectos']);
+            echo json_encode(['message' => 'Correo o contraseña incorrectos o usuario no autorizado']);
         }
     } else {
         $logger->write('Correo o contraseña faltantes en la solicitud: ' . json_encode($data));
