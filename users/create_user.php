@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data['direccion_usuario'],
                 $data['telefono_usuario'],
                 $data['correo_usuario'],
-                password_hash($data['contraseña_usuario'], PASSWORD_BCRYPT),
+                password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT),
                 $data['tipo_usuario'],
                 $data['first_login'] ?? false,
                 $data['created_at'],
