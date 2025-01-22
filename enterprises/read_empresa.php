@@ -15,8 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 FROM usuario
                 WHERE id_empresa = e.id_empresa
             )
+            WHERE e.prefijo_empresa != ?
         ');
-        $stmt->execute();
+        $stmt->execute(['ESAPE']);
         $empresas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if ($empresas) {
