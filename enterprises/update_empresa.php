@@ -18,18 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         $razon_social = $data['razon_social'];
 
         try {
-            // Verificar si el correo ya existe para otra empresa
-            $stmt = $db->prepare('SELECT COUNT(*) FROM empresa WHERE correo_empresa = ? AND id_empresa != ?');
-            $stmt->execute([$correo, $id_empresa]);
-            $count = $stmt->fetchColumn();
-
-            if ($count > 0) {
-                $logger->write('Correo ya existe para otra empresa: ' . $correo);
-                http_response_code(409);
-                echo json_encode(['message' => 'El correo ya está registrado para otra empresa']);
-                exit;
-            }
-
             // Actualizar la empresa
             $stmt = $db->prepare('UPDATE empresa SET nombre_empresa = ?, direccion_empresa = ?, telefono_empresa = ?, correo_empresa = ?, prefijo_empresa = ?, razon_social = ? WHERE id_empresa = ?');
             $result = $stmt->execute([$nombre, $direccion, $telefono, $correo, $prefijo, $razon_social, $id_empresa]);
