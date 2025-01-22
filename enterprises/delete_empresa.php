@@ -5,11 +5,8 @@ $db = Database::getInstance();
 $logger = new Log();
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $logger->write('Delete empresa request received: ' . json_encode($data));
-
-    if (isset($data['id_empresa'])) {
-        $id_empresa = $data['id_empresa'];
+    if (isset($_GET['id_empresa'])) {
+        $id_empresa = $_GET['id_empresa'];
 
         // Obtener el prefijo de la empresa
         $stmt = $db->prepare('SELECT prefijo_empresa FROM empresa WHERE id_empresa = ?');
@@ -32,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             echo json_encode(['message' => 'Empresa no encontrada']);
         }
     } else {
-        $logger->write('Missing id_empresa in delete empresa request: ' . json_encode($data));
+        $logger->write('Missing id_empresa in delete empresa request: ' . json_encode($_GET));
         http_response_code(400);
         echo json_encode(['message' => 'Falta el ID de la empresa']);
     }
