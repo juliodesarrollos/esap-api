@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             $stmt->execute([$nuevo_prefijo, $id_empresa]);
 
             $logger->write('Empresa marked as inactive with ID: ' . $id_empresa);
+            http_response_code(200);
             echo json_encode(['message' => 'Empresa marcada como inactiva exitosamente']);
         } else {
             $logger->write('Empresa not found with ID: ' . $id_empresa);
