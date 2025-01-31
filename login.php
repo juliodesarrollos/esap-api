@@ -1,0 +1,45 @@
+<?php
+require 'db.php';
+
+$db = Database::getInstance();
+$logger = new Log();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $logger->write('Login request received: ' . json_encode($data));
+
+    if (isset($data['correo_usuario']) && isset($data['contraseña_usuario'])) {
+        $correo = $data['correo_usuario'];
+        $contraseña = $data['contraseña_usuario'];
+
+        $stmt = $db->prepare('
+            SELECT u.*, e.prefijo_empresa 
+            FROM usuario u
+            JOIN empresa e ON u.id_empresa = e.id_empresa
+            WHERE u.correo_usuario = ? AND e.prefijo_empresa = ?
+        ');
+        $stmt->execute([$correo, 'ESAPE']);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($contraseña, $user['contraseña_usuario'])) {
+            $logger->write('User authenticated: ' . json_encode($user));
+            echo json_encode([
+                'message' => 'Login exitoso',
+                'user' => $user
+            ]);
+        } else {
+            $logger->write('Login failed for: ' . $correo);
+            http_response_code(401);
+            echo json_encode(['message' => 'Correo o contraseña incorrectos o usuario no autorizado']);
+        }
+    } else {
+        $logger->write('Correo o contraseña faltantes en la solicitud: ' . json_encode($data));
+        http_response_code(400);
+        echo json_encode(['message' => 'Correo o contraseña faltantes']);
+    }
+} else {
+    $logger->write('Método no permitido: ' . $_SERVER['REQUEST_METHOD']);
+    http_response_code(405);
+    echo json_encode(['message' => 'Método no permitido']);
+}
+?>
