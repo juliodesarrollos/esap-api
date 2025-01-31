@@ -36,6 +36,7 @@ try {
             SELECT * 
             FROM usuario 
             WHERE id_empresa = ?
+            AND tipo_usuario = "ESAPE"
             ORDER BY id_usuario ASC
         ');
         $stmt->execute([$id_empresa]);
