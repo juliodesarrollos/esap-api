@@ -5,8 +5,8 @@ class Database {
     private static $instance = null;
     private $connection;
     private $host = 'localhost';
-    private $dbname = 'u943683090_esap_prod';
-    private $username = 'u943683090_esap_prod';
+    private $dbname = 'u943683090_esap_stg';
+    private $username = 'u943683090_esap_stg';
     private $password = 'E.s.a.p.1';
     private $logger;
 
