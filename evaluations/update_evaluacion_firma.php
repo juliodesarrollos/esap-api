@@ -12,15 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (isset($data['id_evaluacion'], $data['status'])) {
             try {
-                if ($data['status'] === 'initiated' && isset($data['id_evaluador'])) {
-                    // Actualizar la evaluación con id_evaluador y status
-                    $stmt = $db->prepare('UPDATE evaluacion SET id_evaluador = ?, status = ? WHERE id_evaluacion = ?');
-                    $result = $stmt->execute([
-                        $data['id_evaluador'],
-                        $data['status'],
-                        $data['id_evaluacion']
-                    ]);
-                } elseif ($data['status'] === 'terminated' && isset($data['id_responsable'])) {
+                if ($data['status'] === 'terminated' && isset($data['id_responsable'])) {
                     if (isset($_FILES['firma']) && $_FILES['firma']['error'] === UPLOAD_ERR_OK) {
                         $uploadDir = 'firmas/';
                         // Verificar y crear el directorio si no existe
