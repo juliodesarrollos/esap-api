@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                 SET id_evaluacion = ?, id_extintor = ?, evaluacion_cilindro = ?, evaluacion_manguera = ?, evaluacion_valvula = ?, 
                     evaluacion_manometro = ?, evaluacion_presion_peso = ?, evaluacion_seguro_sello = ?, evaluacion_señalamiento = ?, 
                     evaluacion_etiqueta = ?, evaluacion_soporte = ?, evaluacion_collarin = ?, evaluacion_rueda_um = ?, 
-                    evaluacion_gabinete_bolsa = ?, comentario_evaluacion = ?, created_at = ?, created_by = ?, status = ?
+                    evaluacion_gabinete_bolsa = ?, comentario_evaluacion = ?, created_at =  NOW(), created_by = ?, status = ?
                 WHERE id_evaluacion_extintor = ?
             ');
 
@@ -35,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                 $data['evaluacion_rueda_um'],
                 $data['evaluacion_gabinete_bolsa'],
                 $data['comentario_evaluacion'],
-                $data['created_at'],
                 $data['created_by'],
                 $data['status'],
                 $data['id_evaluacion_extintor']
