@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 password_hash($data['contraseña_usuario'], PASSWORD_DEFAULT),
                 $data['tipo_usuario'],
                 $data['first_login'] ?? false,
-                $data['created_at'],
+                date('Y-m-d H:i:s'),
                 $data['created_by']
             ]);
 
