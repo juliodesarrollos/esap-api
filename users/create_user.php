@@ -4,6 +4,7 @@ require 'db.php';
 $db = Database::getInstance();
 $logger = new Log();
 
+$logger->write('Create user request received: ' . json_encode($data));
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($_POST['data'], true);
     $logger->write('Create user request received: ' . json_encode($data));
