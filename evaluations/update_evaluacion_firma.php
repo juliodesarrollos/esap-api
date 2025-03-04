@@ -28,11 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $logger->write('Error al guardar la firma');
                     }
                     // Actualizar la evaluación con id_responsable y status
-                    $stmt = $db->prepare('UPDATE evaluacion SET id_responsable = ?, status = ?, comentario = ? WHERE id_evaluacion = ?');
+                    $stmt = $db->prepare('UPDATE evaluacion SET id_responsable = ?, status = ?, comentario = ?, evaluated_on = ? WHERE id_evaluacion = ?');
                     $result = $stmt->execute([
                         $data['id_responsable'],
                         $data['status'],
                         $data['comentario'],
+                        date('Y-m-d H:i:s'),
                         $data['id_evaluacion']
                     ]);
                 } else {
