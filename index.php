@@ -143,6 +143,13 @@ if (strpos($url, '/login') !== false) {
         http_response_code(405);
         echo json_encode(['message' => 'Método no permitido']);
     }
+} elseif (strpos($url, '/update_firma_usuario') !== false) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        require 'users/update_firma_usuario.php';
+    } else {
+        http_response_code(405);
+        echo json_encode(['message' => 'Método no permitido']);
+    }
 } else {
     http_response_code(404);
     echo json_encode(['message' => 'Endpoint no encontrado']);
